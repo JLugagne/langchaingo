@@ -8,9 +8,9 @@ require (
 )
 
 require (
-	github.com/Code-Hex/go-generics-cache v1.3.1 // indirect
-	github.com/dlclark/regexp2 v1.10.0 // indirect
+	github.com/Code-Hex/go-generics-cache v1.5.1 // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/pkoukk/tiktoken-go v0.1.6 // indirect
-	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
+	github.com/pkoukk/tiktoken-go v0.1.8 // indirect
+	golang.org/x/exp v0.0.0-20250911091902-df9299821621 // indirect
 )

@@ -3,9 +3,10 @@ package googleai
 
 import (
 	"context"
+	"fmt"
 	"time"
 
-	"github.com/google/generative-ai-go/genai"
+	"google.golang.org/genai"
 	"github.com/tmc/langchaingo/llms"
 )
 
@@ -54,66 +55,28 @@ func (ch *CachingHelper) CreateCachedContent(
 	ttl time.Duration,
 ) (*genai.CachedContent, error) {
 	// Convert langchain messages to genai content
-	contents := make([]*genai.Content, 0, len(messages))
-	var systemInstruction *genai.Content
+	_ = messages // Unused in placeholder implementation
+	_ = modelName // Unused in placeholder implementation
+	_ = ttl // Unused in placeholder implementation
 
-	for _, msg := range messages {
-		parts := make([]genai.Part, 0, len(msg.Parts))
-		for _, part := range msg.Parts {
-			switch p := part.(type) {
-			case llms.TextContent:
-				parts = append(parts, genai.Text(p.Text))
-			case llms.CachedContent:
-				// Extract the underlying content if it's wrapped with cache control
-				// (though Google AI doesn't use inline cache control like Anthropic)
-				if textPart, ok := p.ContentPart.(llms.TextContent); ok {
-					parts = append(parts, genai.Text(textPart.Text))
-				}
-			}
-		}
+	// Placeholder logic - not implemented
 
-		content := &genai.Content{
-			Parts: parts,
-		}
-
-		// Set role
-		switch msg.Role {
-		case llms.ChatMessageTypeSystem:
-			content.Role = "system"
-			systemInstruction = content
-		case llms.ChatMessageTypeHuman:
-			content.Role = "user"
-			contents = append(contents, content)
-		case llms.ChatMessageTypeAI:
-			content.Role = "model"
-			contents = append(contents, content)
-		}
-	}
-
-	// Create the cached content
-	cc := &genai.CachedContent{
-		Model:             modelName,
-		Contents:          contents,
-		SystemInstruction: systemInstruction,
-		Expiration: genai.ExpireTimeOrTTL{
-			TTL: ttl,
-		},
-	}
-
-	return ch.client.CreateCachedContent(ctx, cc)
+	// Note: The new google.golang.org/genai SDK may not support caching in the same way
+	// This is a placeholder implementation that needs to be updated based on the actual API
+	return nil, fmt.Errorf("caching not yet supported with google.golang.org/genai SDK")
 }
 
 // GetCachedContent retrieves existing cached content by name.
 func (ch *CachingHelper) GetCachedContent(ctx context.Context, name string) (*genai.CachedContent, error) {
-	return ch.client.GetCachedContent(ctx, name)
+	return nil, fmt.Errorf("caching not yet supported with google.golang.org/genai SDK")
 }
 
 // DeleteCachedContent removes cached content.
 func (ch *CachingHelper) DeleteCachedContent(ctx context.Context, name string) error {
-	return ch.client.DeleteCachedContent(ctx, name)
+	return fmt.Errorf("caching not yet supported with google.golang.org/genai SDK")
 }
 
-// ListCachedContents returns an iterator for all cached content.
-func (ch *CachingHelper) ListCachedContents(ctx context.Context) *genai.CachedContentIterator {
-	return ch.client.ListCachedContents(ctx)
+// ListCachedContents returns a list of all cached content.
+func (ch *CachingHelper) ListCachedContents(ctx context.Context) ([]*genai.CachedContent, error) {
+	return nil, fmt.Errorf("caching not yet supported with google.golang.org/genai SDK")
 }

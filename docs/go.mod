@@ -1,9 +1,11 @@
 module search-indexer
 
-go 1.21
+go 1.23.5
+
+toolchain go1.24.6
 
 require (
-	github.com/yuin/goldmark v1.7.8
+	github.com/yuin/goldmark v1.7.13
 	github.com/yuin/goldmark-meta v1.1.0
 )
 

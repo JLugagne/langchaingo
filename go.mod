@@ -33,7 +33,6 @@ require (
 	github.com/IBM/watsonx-go v1.0.0
 	github.com/cohere-ai/tokenizer v1.1.2
 	github.com/gage-technologies/mistral-go v1.1.0
-	github.com/google/generative-ai-go v0.15.1
 	github.com/pkoukk/tiktoken-go v0.1.6
 )
 
@@ -54,7 +53,6 @@ require (
 // Cloud platforms and AI services
 require (
 	cloud.google.com/go/aiplatform v1.69.0
-	cloud.google.com/go/vertexai v0.12.0
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/config v1.29.4
 	github.com/aws/aws-sdk-go-v2/service/bedrockagent v1.40.0
@@ -117,7 +115,6 @@ require (
 // Cloud platforms and AI services - indirect
 require (
 	cloud.google.com/go v0.116.0 // indirect
-	cloud.google.com/go/ai v0.7.0 // indirect
 	cloud.google.com/go/alloydb v1.14.0 // indirect
 	cloud.google.com/go/auth v0.14.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.7 // indirect
@@ -314,6 +311,12 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-require github.com/testcontainers/testcontainers-go/modules/mariadb v0.38.0
+require (
+	github.com/testcontainers/testcontainers-go/modules/mariadb v0.38.0
+	google.golang.org/genai v1.25.0
+)
 
-require github.com/stretchr/objx v0.5.2 // indirect
+require (
+	github.com/gorilla/websocket v1.5.3 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
+)

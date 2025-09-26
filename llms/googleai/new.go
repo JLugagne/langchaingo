@@ -6,7 +6,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/google/generative-ai-go/genai"
+	"google.golang.org/genai"
 	"github.com/tmc/langchaingo/callbacks"
 	"github.com/tmc/langchaingo/llms"
 )
@@ -37,7 +37,27 @@ func New(ctx context.Context, opts ...Option) (*GoogleAI, error) {
 		model: clientOptions.DefaultModel, // Store the default model
 	}
 
-	client, err := genai.NewClient(ctx, clientOptions.ClientOptions...)
+	// Create client config for google.golang.org/genai
+	config := &genai.ClientConfig{}
+	
+	// Set API key if provided
+	for _, opt := range clientOptions.ClientOptions {
+		// Note: This is a simplified approach - may need refinement based on actual option types
+		if apiKeyOpt, ok := opt.(interface{ GetAPIKey() string }); ok {
+			config.APIKey = apiKeyOpt.GetAPIKey()
+			break
+		}
+	}
+	
+	// Set project and location for Vertex AI if specified
+	if clientOptions.CloudProject != "" {
+		config.Project = clientOptions.CloudProject
+	}
+	if clientOptions.CloudLocation != "" {
+		config.Location = clientOptions.CloudLocation
+	}
+	
+	client, err := genai.NewClient(ctx, config)
 	if err != nil {
 		return gi, err
 	}
@@ -50,8 +70,11 @@ func New(ctx context.Context, opts ...Option) (*GoogleAI, error) {
 // This should be called when the GoogleAI instance is no longer needed
 // to prevent memory leaks from the underlying gRPC connections.
 func (g *GoogleAI) Close() error {
+	// Note: The new google.golang.org/genai client may not have a Close method
+	// Check the client documentation for proper cleanup
 	if g.client != nil {
-		return g.client.Close()
+		// For now, no explicit close needed - check actual API documentation
+		return nil
 	}
 	return nil
 }

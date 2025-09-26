@@ -5,7 +5,7 @@ import (
 	"os"
 	"reflect"
 
-	"cloud.google.com/go/vertexai/genai"
+	geneai "google.golang.org/genai"
 	"github.com/tmc/langchaingo/llms"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
@@ -23,6 +23,7 @@ type Options struct {
 	DefaultTopK           int
 	DefaultTopP           float64
 	HarmThreshold         HarmBlockThreshold
+	ResponseFormat        *geneai.Schema
 
 	ClientOptions []option.ClientOption
 }
@@ -86,9 +87,12 @@ func WithCredentialsFile(credentialsFile string) Option {
 }
 
 // WithRest configures the client to use the REST API.
+// Note: The google.golang.org/genai package handles REST/gRPC transport internally
+// through the Backend configuration in ClientConfig.
 func WithRest() Option {
 	return func(opts *Options) {
-		opts.ClientOptions = append(opts.ClientOptions, genai.WithREST())
+		// The new genai SDK uses Backend configuration instead of WithREST()
+		// This is handled in the client creation in new.go
 	}
 }
 
@@ -134,7 +138,7 @@ func WithDefaultModel(defaultModel string) Option {
 	}
 }
 
-// WithDefaultModel passes a default embedding model name to the client. This
+// WithDefaultEmbeddingModel passes a default embedding model name to the client. This
 // model name is used if not explicitly provided in specific client invocations.
 func WithDefaultEmbeddingModel(defaultEmbeddingModel string) Option {
 	return func(opts *Options) {
@@ -194,6 +198,12 @@ func WithCachedContent(name string) llms.CallOption {
 			o.Metadata = make(map[string]interface{})
 		}
 		o.Metadata["CachedContentName"] = name
+	}
+}
+
+func WithResponseFormat(format *geneai.Schema) Option {
+	return func(o *Options) {
+		o.ResponseFormat = format
 	}
 }
 

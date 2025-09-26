@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/google/generative-ai-go/genai"
+	"google.golang.org/genai"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
