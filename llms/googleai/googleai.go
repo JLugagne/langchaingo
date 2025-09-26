@@ -9,9 +9,9 @@ import (
 	"io"
 	"strings"
 
-	"google.golang.org/genai"
 	"github.com/tmc/langchaingo/internal/imageutil"
 	"github.com/tmc/langchaingo/llms"
+	"google.golang.org/genai"
 )
 
 var (
@@ -74,12 +74,12 @@ func (g *GoogleAI) GenerateContent(
 	maxTokensInt := int32(opts.MaxTokens)
 	topPFloat := float32(opts.TopP)
 	topKFloat := float32(opts.TopK)
-	
+
 	config := &genai.GenerateContentConfig{
 		Temperature:     &tempFloat,
 		MaxOutputTokens: maxTokensInt,
-		TopP:           &topPFloat,
-		TopK:           &topKFloat,
+		TopP:            &topPFloat,
+		TopK:            &topKFloat,
 	}
 
 	// Set stop sequences if provided
@@ -87,7 +87,7 @@ func (g *GoogleAI) GenerateContent(
 		config.StopSequences = opts.StopWords
 	}
 
-	// Set JSON mode if requested  
+	// Set JSON mode if requested
 	if opts.JSONMode {
 		config.ResponseMIMEType = ResponseMIMETypeJson
 	}
@@ -96,6 +96,11 @@ func (g *GoogleAI) GenerateContent(
 			return nil, fmt.Errorf("conflicting options, can't use JSONMode and ResponseMIMEType together")
 		}
 		config.ResponseMIMEType = opts.ResponseMIMEType
+	}
+
+	if g.opts.ResponseFormat != nil {
+		config.ResponseJsonSchema = g.opts.ResponseFormat
+		config.ResponseMIMEType = ResponseMIMETypeJson
 	}
 
 	// Set tools if provided
@@ -197,7 +202,7 @@ func convertMessages(messages []llms.MessageContent) ([]*genai.Content, *genai.C
 		// Set role
 		switch msg.Role {
 		case llms.ChatMessageTypeSystem:
-			content.Role = "system"
+			content.Role = "user"
 			systemInstruction = content
 		case llms.ChatMessageTypeHuman:
 			content.Role = "user"
